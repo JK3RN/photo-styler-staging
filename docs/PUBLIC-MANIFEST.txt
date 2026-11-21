@@ -15,6 +15,12 @@ docs/media/application.png
 docs/media/banner.png
 docs/media/browser-smoke.mjs
 docs/media/generate.py
+docs/media/showcase/chicago-app.webp
+docs/media/showcase/chicago-original.jpg
+docs/media/showcase/death-valley-app.webp
+docs/media/showcase/death-valley-original.jpg
+docs/media/showcase/hoover-dam-app.webp
+docs/media/showcase/hoover-dam-original.jpg
 docs/media/signal-valley-red-crt.png
 docs/media/signal-valley.png
 pyproject.toml

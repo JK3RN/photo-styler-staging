@@ -15,8 +15,6 @@ uv run --no-sync photo-styler
 
 Open [Photo Styler on loopback](http://127.0.0.1:8765). Import an image with **Bild auswählen**, select a preset and click **Laden**. Use **Vollauflösung speichern** to export. Stop the server with `Ctrl+C`.
 
-![Photo Styler in Chromium displaying a Red CRT preview of the synthetic Signal Valley scene](docs/media/application.png)
-
 | Capability | Release scope |
 | --- | --- |
 | Input | Single-frame JPEG, PNG and WebP. Optional HEIC/HEIF decoder. |
@@ -24,13 +22,17 @@ Open [Photo Styler on loopback](http://127.0.0.1:8765). Import an image with **B
 | Presets | Red CRT, Dusk Cyan Artwork and locally saved presets |
 | Output | Preview up to 1200 px on its longest side. Full-resolution PNG, JPEG or WebP export within input limits. |
 
-## Before and after
+## Showcase
 
-The synthetic **Signal Valley** source is 1440 × 900. The export uses the bundled **Red CRT** preset with PNG selected as the output format. Select [the original](docs/media/signal-valley.png) in the app to reproduce it.
+Three photographs, processed in the running app. Open a screenshot to see the controls at full size.
 
-| Original | Red CRT |
+| Original | In Photo Styler |
 | --- | --- |
-| ![Original synthetic landscape with a warm sunset and blue mountains](docs/media/signal-valley.png) | ![The same landscape rendered with the Red CRT preset](docs/media/signal-valley-red-crt.png) |
+| **Chicago at night**<br>[<img src="docs/media/showcase/chicago-original.jpg" width="230" alt="Aerial photograph of Chicago and Lake Michigan at night">](docs/media/showcase/chicago-original.jpg) | [![Photo Styler applying a green CRT palette to the Chicago street grid](docs/media/showcase/chicago-app.webp)](docs/media/showcase/chicago-app.webp)<br>**Phosphor Grid** · green palette, Floyd–Steinberg dithering and visible scanlines |
+| **Death Valley dunes**<br>[<img src="docs/media/showcase/death-valley-original.jpg" width="230" alt="Sunlit ridges and shadows in the Death Valley dunes">](docs/media/showcase/death-valley-original.jpg) | [![Photo Styler rendering the dunes in cool blue shades with darker edges](docs/media/showcase/death-valley-app.webp)](docs/media/showcase/death-valley-app.webp)<br>**Blue Hour** · cool blues and a vignette that draws the eye to the ridges |
+| **Hoover Dam**<br>[<img src="docs/media/showcase/hoover-dam-original.jpg" width="230" alt="Black-and-white archival photograph of the upstream face of Hoover Dam">](docs/media/showcase/hoover-dam-original.jpg) | [![Photo Styler rendering the dam in a five-color sulfur and plum palette](docs/media/showcase/hoover-dam-app.webp)](docs/media/showcase/hoover-dam-app.webp)<br>**Sulfur Print** · five colors and hard tonal steps with dithering off |
+
+These looks use custom settings. See the [image credits](THIRD_PARTY_NOTICES.md#showcase-photographs) or try the synthetic [Signal Valley example](docs/media/signal-valley.png) with the built-in **Red CRT** preset ([matching export](docs/media/signal-valley-red-crt.png)).
 
 ## How it works
 
