@@ -35,17 +35,64 @@ jobs:
       - run: docker build --tag photo-styler:ci .
       - name: Smoke-test container and persistent preset storage
         run: |
+          set -euo pipefail
+          engine_version=$(docker version --format '{{.Server.Version}}')
+          echo "Docker Engine $engine_version"
+          test "${engine_version%%.*}" -ge 28
+
           docker volume create photo-styler-ci
-          trap 'docker rm -f photo-styler-ci; docker volume rm photo-styler-ci' EXIT
-          docker run -d --name photo-styler-ci --read-only --tmpfs /tmp \
-            -p 127.0.0.1::8765 -v photo-styler-ci:/data photo-styler:ci
+          cleanup() {
+            local rc=$?
+            if [ "$rc" -ne 0 ]; then docker logs photo-styler-ci || true; fi
+            docker rm -f photo-styler-ci >/dev/null 2>&1 || true
+            docker volume rm photo-styler-ci >/dev/null
+          }
+          trap cleanup EXIT
+
+          start_container() {
+            docker run -d --name photo-styler-ci --read-only --tmpfs /tmp \
+              -p 127.0.0.1::8765 -v photo-styler-ci:/data photo-styler:ci
+            local published
+            published=$(docker port photo-styler-ci 8765/tcp)
+            [[ "$published" =~ ^127\.0\.0\.1:[0-9]+$ ]]
+            port=${published##*:}
+            endpoint="http://$published"
+            echo "Published container port at $published"
+            # Docker can accept a connection before the app is listening and reset it.
+            for attempt in {1..20}; do
+              if curl --noproxy '*' -fsS --max-time 2 "$endpoint/" -o /dev/null 2>/dev/null; then
+                return 0
+              fi
+              sleep 1
+            done
+            echo "Photo Styler did not become ready" >&2
+            return 1
+          }
+
+          start_container
           test "$(docker exec photo-styler-ci id -u)" = 10001
-          endpoint="http://$(docker port photo-styler-ci 8765/tcp)"
-          curl -fsS --retry 10 --retry-connrefused "$endpoint/" -o /dev/null
+          runner_ip=$(ip -4 route get 1.1.1.1 | awk '{for (i=1; i<NF; ++i) if ($i=="src") print $(i+1)}')
+          test -n "$runner_ip"
+          if curl --noproxy '*' -sS --max-time 2 -H "Host: 127.0.0.1:$port" \
+            "http://$runner_ip:$port/" -o /dev/null 2>/dev/null; then
+            echo "Photo Styler is reachable on a non-loopback interface" >&2
+            exit 1
+          fi
+
           curl -fsS -H 'Content-Type: application/json' \
             -d '{"name":"Docker CI","settings":{}}' "$endpoint/api/presets" -o /dev/null
           curl -fsS -F image=@docs/media/signal-valley.png -F 'settings={"output_format":"png"}' \
             "$endpoint/api/render/export" -o "$RUNNER_TEMP/photo-styler-export.png"
-          docker restart photo-styler-ci
-          endpoint="http://$(docker port photo-styler-ci 8765/tcp)"
-          curl -fsS --retry 10 --retry-connrefused "$endpoint/api/presets" | grep -q 'Docker CI'
+          python3 - "$RUNNER_TEMP/photo-styler-export.png" <<'PYTHON'
+          import struct
+          import sys
+          from pathlib import Path
+
+          png = Path(sys.argv[1]).read_bytes()
+          assert png[:8] == b"\x89PNG\r\n\x1a\n"
+          assert struct.unpack(">II", png[16:24]) == (1440, 900)
+          PYTHON
+
+          docker rm -f photo-styler-ci
+          start_container
+          curl -fsS "$endpoint/api/presets" | grep -q 'Docker CI'

@@ -61,4 +61,4 @@ The dependency audit covers versioned Python packages. Bundled native libraries 
 
 ## Verification scope
 
-The verified native platform is Linux x86-64 with CPython 3.12, 3.13 and 3.14. The Dockerfile has been built for Linux/amd64 and its filesystem tested in an isolated namespace. Verification of Docker Engine port publishing and named-volume initialization remains open.
+The verified native platform is Linux x86-64 with CPython 3.12, 3.13 and 3.14. The Linux/amd64 Docker Engine job checks loopback-only port publishing, non-root execution, full-resolution export, and preset persistence across container replacement using a fresh named volume.
