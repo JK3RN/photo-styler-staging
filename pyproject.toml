@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "photo-styler"
+dynamic = ["version"]
+description = "A local web app for palette-based image styling"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.12,<3.15"
+authors = [{ name = "Photo Styler contributors" }]
+keywords = ["photo", "image-processing", "pillow", "fastapi"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia :: Graphics :: Editors",
+]
+dependencies = [
+  "fastapi>=0.141.1,<1",
+  "uvicorn>=0.52.4,<1",
+  "Pillow>=13.0,<14",
+  "pydantic>=2.13.4,<3",
+  "python-multipart>=0.0.32,<1",
+  "starlette>=1.6,<2",
+]
+
+[project.optional-dependencies]
+heif = ["pillow-heif>=1.0,<2"]
+dev = [
+  "build>=1.2,<2",
+  "hatchling==1.32.0",
+  "httpx2>=2,<3",
+  "pytest>=8,<10",
+  "ruff>=0.6,<1",
+]
+
+[project.scripts]
+photo-styler = "photo_styler.app:run"
+
+[tool.hatch.version]
+path = "src/photo_styler/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/photo_styler"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.uv]
+build-constraint-dependencies = [
+  "packaging==26.3",
+  "pathspec==1.1.1",
+  "pluggy==1.7.0",
+  "tomlkit==0.15.2",
+  "trove-classifiers==2026.9.21.13",
+]

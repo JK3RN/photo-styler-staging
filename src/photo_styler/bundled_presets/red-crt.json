@@ -1,0 +1,16 @@
+{
+  "name": "Red CRT",
+  "settings": {
+    "contrast": 1.35,
+    "brightness": 1.0,
+    "gamma": 1.0,
+    "dithering": true,
+    "scanline_opacity": 0.12,
+    "scanline_spacing": 3,
+    "scanline_width": 1,
+    "vignette_strength": 0.18,
+    "palette": ["#080303", "#230606", "#4a0e0c", "#942419", "#da4328", "#ff7648", "#ffc4a3"],
+    "output_format": "webp",
+    "quality": 92
+  }
+}

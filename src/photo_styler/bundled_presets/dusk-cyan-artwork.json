@@ -1,0 +1,16 @@
+{
+  "name": "Dusk Cyan Artwork",
+  "settings": {
+    "contrast": 0.78,
+    "brightness": 0.82,
+    "gamma": 0.82,
+    "dithering": true,
+    "scanline_opacity": 0.04,
+    "scanline_spacing": 5,
+    "scanline_width": 1,
+    "vignette_strength": 0.32,
+    "palette": ["#080d11", "#111b22", "#1c2b34", "#2b3f49", "#49616a", "#718b92", "#a5c7c9"],
+    "output_format": "webp",
+    "quality": 92
+  }
+}

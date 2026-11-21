@@ -1,0 +1,18 @@
+.venv/
+dist/
+build/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.py[cod]
+.DS_Store
+
+# Local data and secrets
+/.data/
+/data/
+/uploads/
+/exports/
+/presets/
+.env
+.env.*
